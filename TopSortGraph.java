@@ -1,10 +1,4 @@
-/*
- *  MRZ220001
- *  Michael Zeller
- *  CS 3345
- *  Project 5
- *  Topsort
- */
+
 
 
 import java.util.ArrayList;
@@ -14,10 +8,10 @@ import java.util.Scanner;
 import java.util.Iterator;
 
 public class TopSortGraph {
-	// Vertex class where the vertex is a linked list and has a indegree for topsort
+	// Vertex class where the vertex is a linked list and has an indegree for topsort
 	private static class Vertex {
 		// Vertex contains the Vetexes name as a String, a LinkedList of String for its out edges,
-		// and a integer representing the amount of in edges it has
+		// and an integer representing the amount of edges it has
 		private String name;
 		private LinkedList<String> edges;
 		private int indegree = 0;
@@ -53,12 +47,12 @@ public class TopSortGraph {
 		private void setIndegree(int n) {
 			this.indegree = n;
 		}
-		//Helper method to count occurances of a edge for a given vertex for indegrees
+		//Helper method to count occurrences of an edge for a given vertex for indegrees
 		public int countEdge(String name) {
 			
 			int count = 0;
 			Iterator<String> current = edges.iterator();
-			// Loop to add all occurances of the edge and return the integer
+			// Loop to add all occurrences of the edge and return the integer
 			while(current.hasNext()) {
 				if(current.next().equals(name)) {
 					count++;
@@ -72,11 +66,11 @@ public class TopSortGraph {
 	}
 	
 	private static class Graph {
-		// Data structer is an ArrayList of Linked List to maintain size, which is the purpose of an adjacentcy list, and the vertexes are indexed
+		// Data structure is an ArrayList of Linked List to maintain size, which is the purpose of an adjacency list, and the vertexes are indexed
 		private ArrayList<Vertex> vertices = new ArrayList<>();
 		public int size = 0;
 		
-		//getter to return the vertex with the name as a argument
+		//getter to return the vertex with the name as an argument
 		public Vertex getVertex(String name){
 			for (Vertex vertex : vertices) {
 				if(vertex.getName().equals(name)) {
@@ -90,12 +84,12 @@ public class TopSortGraph {
 			return vertices.get(i);
 		}
 		
-		// Add edge adds each edge and if its corrisponding vertex allready exist in the graph, than increments that vetrices indegree
+		// Add edge adds each edge and if its corresponding vertex already exists in the graph, then increments that vertices indegree
 		public void addEdge(int index, String name) {
 			if (index < 0 || index >= size()) return;
 			// Adds edge
 			getVertex(index).edges.add(name);
-			// increments corrisponding indegree if applicable
+			// increments corresponding indegree if applicable
 			Vertex toVertex = getVertex(name);
 			if(toVertex != null) {
 				toVertex.incrementIndegree();
@@ -111,19 +105,19 @@ public class TopSortGraph {
 					vertex.incrementIndegree(getVertex(i).countEdge(name));
 				}
 			}
-			// Simply adds the vertex to the arrayList
+			// Simply adds the vertex to the ArrayList
 			vertices.add(vertex);
 		}
 		
-		// Resturns the amount of vertices in the graph
+		// Returns the amount of vertices in the graph
 		public int size(){
 			return vertices.size();
 		}
 		
 	
-		// Method to resset the vertiecs indegrees after topsort is complete (Maintain graphs correctness)
+		// Method to reset the vertices indegrees after topsort is complete (Maintain graphs correctness)
 		private void resetIndegree() {
-			// Sets each indgree to zero
+			// Sets each indegree to zero
 			for(int i = 0; i < size(); i++) {
 				getVertex(i).setIndegree(0);
 			}
@@ -139,7 +133,7 @@ public class TopSortGraph {
 	
 	public static void main(String[] args) {
 		Graph graph = new Graph();		// First the graph is created
-		createAdjacentcyList(graph);	// Now we use our create adjacentcy list method to read in a file and fill the graph
+		createAdjacentcyList(graph);	// Now we use our create adjacency list method to read in a file and fill the graph
 
 		int size = graph.size();
 		String[] topologicalList = new String[size];	// Array for the resulting topological sorted list
@@ -154,7 +148,7 @@ public class TopSortGraph {
 	}
 	
 	public static void topsort(Graph graph, String[] topologicalList) {
-			// Queue for the the vertexes, by indegree
+			// Queue for the vertexes, by indegree
 			Queue <Vertex> q= new LinkedList<>();
 			int counter = 0;
 			// Insert each vertex with no Indegree into the queue
@@ -164,13 +158,13 @@ public class TopSortGraph {
 				}
 			}
 			
-			//Queue should be empty after each vertex is iterated through, if not than a Cycle was in the graph and a vertex got added twice
+			//Queue should be empty after each vertex is iterated through, if not then a Cycle was in the graph and a vertex got added twice
 			while(!q.isEmpty()) {
 				// Append the Indegree at the end of the queue to the Sorted List
 				Vertex v = q.remove();
 				topologicalList[counter++] = v.name;
-				// Loop though each edge and appending the edges with indegrees equal to zero to the queue
-				// (neglecting the current vertex, v's, edge that is connected to it)
+				// Loop through each edge and appending the edges with indegrees equal to zero to the queue
+				// (neglecting the current vertex, v's, and edge's that is connected to it)
 				Iterator<String> w = v.edges.iterator();
 				while(w.hasNext()) {
 					String edge = w.next();
@@ -179,7 +173,7 @@ public class TopSortGraph {
 					}
 				}	
 			}
-			// exeption not found if cycle is detected (If the topological list is larger than the amount of vertices)
+			// exception not found if a cycle is detected (If the topological list is larger than the amount of vertices)
 			graph.resetIndegree(); // Resets the graphs indegree to maintain the graph
 			if(counter != graph.size()) {
 				throw new RuntimeException("Cycle detected in the graph");
@@ -200,7 +194,7 @@ public class TopSortGraph {
 			// Adding each edge to the linked list
 			graph.addVertex(vertex);
 			for(int i = 1; i < lineArray.length; i++) {
-				// if the vertex is equaled to one of its edges a cycle detected error will be thrown
+				//If the vertex is equaled to one of its edges a cycle-detected error will be thrown
 				if(lineArray[i].equals(lineArray[0]))
 					throw new RuntimeException("Cycle detected in the graph");
 				graph.addEdge(j, lineArray[i]);
